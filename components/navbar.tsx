@@ -5,9 +5,12 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/components/auth-context";
 import { useState, useRef, useEffect } from "react";
+import { useI18n } from "@/components/i18n-provider";
+import { LanguageToggle } from "@/components/language-toggle";
 
 export function Navbar() {
   const { user } = useAuth();
+  const { t } = useI18n();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,7 +51,7 @@ export function Navbar() {
               <Cpu className="h-5 w-5" />
             </div>
             <span className="font-display text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
-              RetroBoard
+              {t("navbar.brand")}
             </span>
           </Link>
           <nav className="hidden md:flex gap-6 text-sm font-medium text-zinc-600 dark:text-zinc-400">
@@ -56,36 +59,37 @@ export function Navbar() {
               href="#"
               className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
             >
-              Boards
+              {t("navbar.boards")}
             </Link>
             <Link
               href="#"
               className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
             >
-              Controllers
+              {t("navbar.controllers")}
             </Link>
             <Link
               href="#"
               className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
             >
-              Displays
+              {t("navbar.displays")}
             </Link>
             <Link
               href="#"
               className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
             >
-              Cases
+              {t("navbar.cases")}
             </Link>
             <Link
               href="#"
               className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
             >
-              Kits
+              {t("navbar.kits")}
             </Link>
           </nav>
         </div>
         <div className="flex items-center gap-2 sm:gap-4">
           <ThemeToggle />
+          <LanguageToggle />
           {/* Animated Search Bar */}
           <div className="relative flex items-center">
             <div
@@ -103,7 +107,7 @@ export function Navbar() {
                     ? "text-zinc-500 dark:text-zinc-400"
                     : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
                 }`}
-                aria-label="Поиск"
+                aria-label={t("navbar.search")}
               >
                 <Search className="h-5 w-5" />
               </button>
@@ -114,7 +118,7 @@ export function Navbar() {
                 type="text"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                placeholder="Поиск..."
+                placeholder={t("navbar.search")}
                 className={`flex-1 bg-transparent text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 outline-none pr-2 transition-opacity duration-200 ${
                   searchOpen ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}
@@ -128,7 +132,7 @@ export function Navbar() {
                     setSearchValue("");
                   }}
                   className="flex-shrink-0 flex items-center justify-center h-9 w-9 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors duration-200"
-                  aria-label="Закрыть поиск"
+                  aria-label={t("navbar.closeSearch")}
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -140,7 +144,7 @@ export function Navbar() {
           <Link
             href={user ? "/profile" : "/login"}
             className="hidden sm:flex items-center justify-center h-8 w-8 rounded-full transition-colors text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
-            title={user ? `Профиль: ${user.name}` : "Войти"}
+            title={user ? `${t("navbar.profile")}: ${user.name}` : t("navbar.login")}
           >
             {initials ? (
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold">
@@ -156,11 +160,11 @@ export function Navbar() {
             <span className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-zinc-900 dark:bg-white text-[10px] font-bold text-white dark:text-zinc-900">
               2
             </span>
-            <span className="sr-only">Cart</span>
+            <span className="sr-only">{t("navbar.cart")}</span>
           </button>
           <button className="md:hidden text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors p-2">
             <Menu className="h-5 w-5" />
-            <span className="sr-only">Menu</span>
+            <span className="sr-only">{t("navbar.menu")}</span>
           </button>
         </div>
       </div>

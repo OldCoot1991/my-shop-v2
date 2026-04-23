@@ -3,6 +3,8 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/components/auth-context";
+import { cookies } from "next/headers";
+import { I18nProvider } from "@/components/i18n-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,14 +22,18 @@ export const metadata: Metadata = {
     "Your ultimate destination for single-board computers, 8BitDo controllers, and DIY electronics.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const langCookie = cookieStore.get("NEXT_LOCALE");
+  const lang = (langCookie?.value === "en" ? "en" : "ru") as "ru" | "en";
+
   return (
     <html
-      lang="en"
+      lang={lang}
       className={`${inter.variable} ${spaceGrotesk.variable}`}
       suppressHydrationWarning
     >
@@ -41,7 +47,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>{children}</AuthProvider>
+          <I18nProvider initialLang={lang}>
+            <AuthProvider>{children}</AuthProvider>
+          </I18nProvider>
         </ThemeProvider>
       </body>
     </html>
